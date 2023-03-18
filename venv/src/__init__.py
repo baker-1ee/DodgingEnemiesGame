@@ -17,7 +17,7 @@ pygame.display.set_caption("My Game")
 clock = pygame.time.Clock()
 
 # 이미지를 게임에서 사용하기 위한 고정 필셀로 리사이징
-resize_image("background.png", "_background_.png", (480, 640))
+resize_image("background.png", "_background_.png", (640, 860))
 resize_image("character.png", "_character_.png", (70, 70))
 resize_image("enemy.png", "_enemy_.png", (70, 70))
 
@@ -103,6 +103,24 @@ while running:
     enemy_rect.top = enemy_y_pos
 
     if character_rect.colliderect(enemy_rect):
+        # 글꼴 설정
+        game_font = pygame.font.Font(None, 50)
+
+        # "GAME OVER" 문구 생성
+        game_over = game_font.render("GAME OVER", True, (255, 255, 255))
+
+        # "GAME OVER" 문구 화면 가운데 위치 계산
+        game_over_rect = game_over.get_rect(center=(screen_width/2, screen_height/2))
+
+        # "GAME OVER" 문구 화면에 그리기
+        screen.blit(game_over, game_over_rect)
+
+        # 화면 업데이트
+        pygame.display.update()
+
+        # 1초 동안 대기
+        pygame.time.delay(1000)
+
         running = False
 
     # 게임 화면 그리기
