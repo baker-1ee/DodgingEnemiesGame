@@ -149,7 +149,6 @@ while running:
         # 1초 동안 대기
         pygame.time.delay(1000)
 
-
     # 게임 화면 그리기
     screen.blit(background, (0, 0))
     screen.blit(character, (character_x_pos, character_y_pos))
