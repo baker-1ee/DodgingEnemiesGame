@@ -1,6 +1,7 @@
 import pygame
 import random
 from resize_image import resize_image
+from Character import Character
 
 # 게임 초기화
 pygame.init()
@@ -21,28 +22,22 @@ game_font = pygame.font.Font(None, 50)
 
 # 이미지를 게임에서 사용하기 위한 고정 필셀로 리사이징
 resize_image("background.png", "_background_.png", (640, 860))
-resize_image("character.png", "_character_.png", (70, 70))
+
 resize_image("enemy.png", "_enemy_.png", (70, 70))
 
 # 이미지 로딩
 background = pygame.image.load("_background_.png")
-character = pygame.image.load("_character_.png")
+
 enemy = pygame.image.load("_enemy_.png")
 
 # 이미지 크기 설정
-character_size = character.get_rect().size
-character_width = character_size[0]
-character_height = character_size[1]
 enemy_size = enemy.get_rect().size
 enemy_width = enemy_size[0]
 enemy_height = enemy_size[1]
 
-# 캐릭터 위치 초기화
-character_x_pos = (screen_width / 2) - (character_width / 2)
-character_y_pos = screen_height - character_height
-
-# 이동 속도 설정
-character_speed = 0.5
+# 캐릭터 생성 및 위치 초기화
+character = Character(70, 70)
+character.init_position(screen_width, screen_height)
 
 # 게임 시간 설정
 play_time = 5
@@ -53,7 +48,6 @@ enemy_y_pos = 0
 enemy_speed = 0.5
 
 # 이미지 크기에 맞는 rect 생성
-character_rect = character.get_rect()
 enemy_rect = enemy.get_rect()
 
 # 방향키가 눌린 상태를 나타내는 변수
@@ -88,14 +82,10 @@ while running:
 
     # 캐릭터 위치 업데이트
     if left_pressed:
-        character_x_pos -= character_speed * dt
-    if right_pressed:
-        character_x_pos += character_speed * dt
+        character.move_left(dt)
 
-    if character_x_pos < 0:
-        character_x_pos = 0
-    elif character_x_pos > screen_width - character_width:
-        character_x_pos = screen_width - character_width
+    if right_pressed:
+        character.move_right(dt)
 
     # 적 위치 업데이트
     enemy_y_pos += enemy_speed * dt * level
@@ -105,13 +95,10 @@ while running:
         enemy_y_pos = 0
 
     # 충돌 처리
-    character_rect.left = character_x_pos
-    character_rect.top = character_y_pos
-
     enemy_rect.left = enemy_x_pos
     enemy_rect.top = enemy_y_pos
 
-    if character_rect.colliderect(enemy_rect):
+    if character.is_collision(enemy_rect):
 
         # "GAME OVER" 문구 생성
         game_over = game_font.render("GAME OVER", True, (255, 255, 255))
@@ -151,7 +138,7 @@ while running:
 
     # 게임 화면 그리기
     screen.blit(background, (0, 0))
-    screen.blit(character, (character_x_pos, character_y_pos))
+    character.draw_on(screen)
     screen.blit(enemy, (enemy_x_pos, enemy_y_pos))
     screen.blit(timer_text, (10, 10))
 
