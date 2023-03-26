@@ -1,7 +1,7 @@
 import pygame
 import random
 from resize_image import resize_image
-from Character import Character
+from character import Character
 
 # 게임 초기화
 pygame.init()
