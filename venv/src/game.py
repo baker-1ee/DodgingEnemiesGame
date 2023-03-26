@@ -1,8 +1,8 @@
 import pygame
 
 from resize_image import resize_image
-from character import Character
 from enemy import Enemy
+from character import Character
 
 
 class Game:
